@@ -1,13 +1,13 @@
 package io.github.vino42;
 
-import io.vertx.core.AbstractVerticle;
-import io.vertx.core.http.HttpHeaders;
-import io.vertx.ext.web.Router;
+import io.vertx.core.Vertx;
+import io.vertx.core.impl.logging.Logger;
+import io.vertx.core.impl.logging.LoggerFactory;
 
 /**
  * =====================================================================================
  *
- * @Created :   2022/2/21 21:51
+ * @Created :   2022/2/22 1:05
  * @Compiler :  jdk 11
  * @Author :    VINO
  * @Email : 38912428@qq.com
@@ -15,21 +15,18 @@ import io.vertx.ext.web.Router;
  * @Decription :
  * =====================================================================================
  */
-public class Server extends AbstractVerticle {
-    // Convenience method so you can run it in your IDE
+public class Server {
+
+    private static final Logger logger = LoggerFactory.getLogger(Server.class);
+
     public static void main(String[] args) {
-        Runner.runExample(Server.class);
+
+        final Vertx vertx = Vertx.vertx();
+
+        vertx.deployVerticle(MainVerticle.class.getName())
+                .onFailure(throwable -> System.exit(-1));
+
     }
 
-    @Override
-    public void start() throws Exception {
 
-        Router router = Router.router(vertx);
-
-        router.route().handler(routingContext -> {
-            routingContext.response().putHeader(HttpHeaders.CONTENT_TYPE, "application/json").end("Hello World!");
-        });
-
-        vertx.createHttpServer().requestHandler(router).listen(8080);
-    }
 }
